@@ -1,11 +1,17 @@
 .login-popup{
-    position: absolute;
-    z-index: 1;
-    width: 100%;
-    height: 100%;
+    position: fixed;
+    z-index: 1000;
+    width: 100vw;
+    height: 100vh;
     background-color: #00000090;
     display: grid;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    isolation: isolate;
 }
+
 .login-popup-container{
     place-self: center;
     width: max(23vw,330px);
@@ -18,48 +24,99 @@
     border-radius: 8px;
     font-size: 14px;
     animation: fadeIn 0.5s;
+    z-index: 1001;
+    position: relative;
 }
+
 .login-popup-title{
     display: flex;
     justify-content: space-between;
     align-items: center;
     color: black;
 }
+
 .login-popup-title img{
     width: 16px;
     cursor: pointer;
+    transition: transform 0.2s ease;
 }
-.login-popup-inputs{
+
+.login-popup-title img:hover{
+    transform: scale(1.1);
+}
+
+.error-message {
+    background-color: #ffebee;
+    color: #c62828;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #ffcdd2;
+    font-size: 12px;
+    text-align: center;
+}
+
+.login-popup-input{
     display: flex;
     flex-direction: column;
     gap: 20px;
 }
-.login-popup-inputs input{
+
+.login-popup-input input{
     outline: none;
     border: 1px solid #c9c9c9;
-    padding: 10px;
+    padding: 12px;
     border-radius: 4px;
+    font-size: 14px;
+    transition: border-color 0.3s ease;
 }
+
+.login-popup-input input:focus{
+    border-color: tomato;
+    box-shadow: 0 0 0 2px rgba(255, 99, 71, 0.1);
+}
+
 .login-popup-container button{
     border: none;
-    padding: 10px;
+    padding: 12px;
     border-radius: 4px;
     color: white;
     background-color: tomato;
     font-size: 15px;
     cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
 }
+
+.login-popup-container button:hover:not(:disabled){
+    background-color: #e64a19;
+    transform: translateY(-1px);
+}
+
+.login-popup-container button:disabled{
+    background-color: #ccc;
+    cursor: not-allowed;
+    transform: none;
+}
+
 .login-popup-condition{
     display: flex;
     align-items: start;
     gap: 8px;
     margin-top: -15px;
 }
+
 .login-popup-condition input{
     margin-top: 5px;
 }
-.login-popup p span{
+
+.login-popup-switch p span{
     color: tomato;
     font-weight: 600;
     cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.login-popup-switch p span:hover{
+    color: #e64a19;
+    text-decoration: underline;
 }

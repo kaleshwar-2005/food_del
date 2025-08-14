@@ -24,7 +24,7 @@
     bottom: 10%;
     left: 6vw;
     animation: fadeIn 3s;
-    z-index: 2;
+    z-index: 1;
 }
 
 .header-contents h2{

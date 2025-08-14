@@ -1,10 +1,12 @@
 import React, { useContext } from 'react'
-import './Cart'
+import './Cart.css'
 import { StoreContext } from '../../context/StoreContext'
 import { useNavigate } from 'react-router-dom'
+
 const Cart = () => {
-  const { cartItem, food_list, removeFromCart,getTotalCartAmt } = useContext(StoreContext)
-  const navigate=useNavigate();
+  const { cartItem, food_list, removeFromCart, getTotalCartAmt } = useContext(StoreContext)
+  const navigate = useNavigate();
+  
   return (
     <div className='cart'>
       <div className="cart-items">
@@ -21,8 +23,8 @@ const Cart = () => {
         {food_list.map((item, index) => {
           if (cartItem[item._id] > 0) {
             return (
-              <>
-                <div className="cart-items-title cart-items-item" key={index}>
+              <React.Fragment key={index}>
+                <div className="cart-items-title cart-items-item">
                   <img src={item.image} alt="" />
                   <p>{item.name}</p>
                   <p>${item.price}</p>
@@ -31,9 +33,10 @@ const Cart = () => {
                   <p onClick={() => removeFromCart(item._id)} className='cross'>x</p>
                 </div>
                 <hr />
-              </>
+              </React.Fragment>
             )
           }
+          return null; // Add explicit return for items not in cart
         })}
       </div>
       <div className="cart-bottom">
@@ -47,21 +50,21 @@ const Cart = () => {
             <hr />
             <div className="cart-total-details">
               <p>Delivery Fee</p>
-              <p>${getTotalCartAmt()===0?0:2}</p>
+              <p>${getTotalCartAmt() === 0 ? 0 : 2}</p>
             </div>
             <hr />
             <div className="cart-total-details">
               <b>Total</b>
-              <b>${getTotalCartAmt() == 0 ? 0:getTotalCartAmt()+2}</b>
+              <b>${getTotalCartAmt() == 0 ? 0 : getTotalCartAmt() + 2}</b>
             </div>
           </div>
-           <button onClick={()=>navigate('/order')}>PROCCED TO CHECKOUT</button>
+          <button onClick={() => navigate('/order')}>PROCEED TO CHECKOUT</button>
         </div>
         <div className="cart-promocode">
           <div>
-            <p>If you have a promo code,Enter it here</p>
+            <p>If you have a promo code, Enter it here</p>
             <div className="cart-promocode-input">
-              <input type="text" name="" id="" placeholder='Enter your promocode'/>
+              <input type="text" name="" id="" placeholder='Enter your promocode' />
               <button>Submit</button>
             </div>
           </div>

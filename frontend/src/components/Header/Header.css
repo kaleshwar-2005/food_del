@@ -1,10 +1,19 @@
 .header{
-    height: 34vw;
+    min-height: 400px;
+    height: 50vh;
     margin: 30px auto;
-    background:url('/header-img.png') no-repeat;
-    background-size: contain;
     position: relative;
+    overflow: hidden;
+    border-radius: 10px;
 }
+
+.header-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
 .header-contents{
     position: absolute;
     display: flex;
@@ -15,16 +24,22 @@
     bottom: 10%;
     left: 6vw;
     animation: fadeIn 3s;
+    z-index: 2;
 }
+
 .header-contents h2{
     font-weight: 500;
     color: white;
     font-size: max(4.5vw,22px);
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
 }
+
 .header-contents p{
     color: white;
     font-size: 1vw;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
 }
+
 .header-contents button{
     border: none;
     color: #747474;
@@ -33,12 +48,21 @@
     background-color: white;
     font-size: max(1vw,13px);
     border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
 }
+
+.header-contents button:hover {
+    background-color: #f0f0f0;
+    transform: translateY(-2px);
+}
+
 @media (max-width:1050px){
     .header-contents{
         max-width: 45%;
     }
 }
+
 @media (max-width:750px){
     .header-contents{
         max-width: 65%;

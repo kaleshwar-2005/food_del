@@ -1,9 +1,12 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import './LoginPopup.css'
 import { assets } from '../../assets/assets'
+import { StoreContext } from '../../context/StoreContext';
+import axios from "axios"
 
 const LoginPopup = (props) => {
     const { setShowLogin } = props;
+    const {url,setToken}=useContext(StoreContext)
     const [currentState, setCurrentState] = useState('Sign Up')
     const [formData, setFormData] = useState({
         name: '',
@@ -69,10 +72,40 @@ const LoginPopup = (props) => {
         setFormData({ name: '', email: '', password: '' })
         setError('')
     }
+    const [data,setData]=useState({
+        name:'',
+        email:'',
+        password:''
+    })
+
+    const onChangeHandler =(event)=>{
+        const name=event.target.name
+        const value=event.target.value
+        setData(data=>({...data,[name]:value}))
+    }
+    const onLogin=async (event)=>{
+        event.preventDefault();
+        let newUrl=url;
+        if(currentState === "Login"){
+            newUrl+="/api/user/login"
+        }  
+        else{
+            newUrl+="/api/user/register"
+        } 
+        const response=await axios.post(newUrl,data);
+        if(response.data.success){
+            setToken(response.data.token)
+            localStorage.setItem("token",response.data.token)
+            setShowLogin(false)
+        }
+        else{
+            alert(response.data.message)
+        }
+    }
     
     return (
         <div className='login-popup'>
-            <form className='login-popup-container' onSubmit={handleSubmit}>
+            <form className='login-popup-container' onSubmit={onLogin}>
                 <div className="login-popup-title">
                     <h2>{currentState}</h2>
                     <img onClick={() => setShowLogin(false)} src={assets.cross_icon} alt="Close" />
@@ -86,8 +119,8 @@ const LoginPopup = (props) => {
                             type="text" 
                             name="name" 
                             placeholder='Your name' 
-                            value={formData.name}
-                            onChange={handleInputChange}
+                            value={data.name}
+                            onChange={onChangeHandler}
                             required 
                         />
                     )}
@@ -95,16 +128,16 @@ const LoginPopup = (props) => {
                         type="email" 
                         name="email"
                         placeholder='Your email' 
-                        value={formData.email}
-                        onChange={handleInputChange}
+                        value={data.email}
+                        onChange={onChangeHandler}
                         required 
                     />
                     <input 
                         type="password" 
                         name="password"
                         placeholder='Your password' 
-                        value={formData.password}
-                        onChange={handleInputChange}
+                        value={data.password}
+                        onChange={onChangeHandler}
                         required 
                     />
                 </div>

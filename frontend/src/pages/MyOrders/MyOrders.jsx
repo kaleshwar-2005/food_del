@@ -1,21 +1,35 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import './MyOrders.css'
 import { assets } from '../../assets/assets'
+import axios from 'axios'
+import { StoreContext } from '../../context/StoreContext'
 
 const MyOrders = () => {
     const [data, setData] = useState([]);
     const { url, token } = useContext(StoreContext);
 
     const fetchOrders = async () => {
-        const response = await axios.post(url + "/api/order/userorders", {}, { headers: { token } });
-        setData(response.data.data);
+        try {
+            const response = await axios.post(url + "/api/order/userorders", {}, { headers: { token } });
+            if (response?.data?.success) {
+                setData(response.data.data || []);
+            }
+        } catch (e) {
+            // ignore; could show a toast
+        }
     }
+
+    useEffect(() => {
+        if (token) {
+            fetchOrders();
+        }
+    }, [token])
 
     return (
         <div className='myorders'>
             <h2>MyOrders</h2>
             <div className="container">
-                {data.map((order,index) => {
+                {data.length === 0 ? <p>No orders yet.</p> : data.map((order,index) => {
                     return (
                         <div key={index} className='my-orders-order'>
                             <img src={assets.parcel_icon} alt="" />

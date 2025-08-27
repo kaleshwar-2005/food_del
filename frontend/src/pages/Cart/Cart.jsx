@@ -25,7 +25,12 @@ const Cart = () => {
             return (
               <React.Fragment key={index}>
                 <div className="cart-items-title cart-items-item">
-                  <img src={url+"/images/"+item.image} alt="" />
+                  {(() => {
+                    const src = (typeof item.image === 'string' && (item.image.startsWith('http') || item.image.startsWith('/')))
+                      ? item.image
+                      : url+"/images/"+item.image;
+                    return <img src={src} alt="" />
+                  })()}
                   <p>{item.name}</p>
                   <p>${item.price}</p>
                   <p>{cartItem[item._id]}</p>

@@ -2,9 +2,10 @@ import React, { useContext, useEffect, useState } from 'react'
 import './PlaceOrder.css'
 import { StoreContext } from '../../context/StoreContext'
 import {useNavigate} from 'react-router-dom'
+import axios from 'axios'
 
 const PlaceOrder = () => {
-  const {getTotalCartAmt,token,food_list,cartItems,url}=useContext(StoreContext)  
+  const {getTotalCartAmt,token,food_list,cartItem,url}=useContext(StoreContext)  
   const [data,setData]=useState({
     firstName:'',
     lastName:'',
@@ -26,11 +27,14 @@ const PlaceOrder = () => {
   const placeOrder=async (event)=>{
     event.preventDefault();
     let orderItems=[];
-    food_list.map((item)=>{
-      if(cartItems[item._id]>0){
-        let itemInfo=item;
-        itemInfo[quantity]=cartItems[item._id];
-        orderItems.push(itemInfo);
+    food_list.forEach((item)=>{
+      const qty = cartItem[item._id] || 0;
+      if(qty>0){
+        orderItems.push({
+          name: item.name,
+          price: item.price,
+          quantity: qty
+        });
       }
     })
     let orderData={
@@ -44,7 +48,7 @@ const PlaceOrder = () => {
       window.location.replace(session_url);
     }
     else{
-      alert("Error");
+      alert(response.data.message || "Error");
     }
   }
   const navigate=useNavigate();

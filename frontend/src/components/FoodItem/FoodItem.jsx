@@ -12,7 +12,12 @@ const FoodItem = (props) => {
     return (
         <div className='food-item'>
             <div className="food-item-img-container">
-                <img src={url+"/images/"+image} alt="" className="food-item-image" />
+                {(() => {
+                    const imageSrc = (typeof image === 'string' && (image.startsWith('http') || image.startsWith('/'))) 
+                        ? image 
+                        : url+"/images/"+image;
+                    return <img src={imageSrc} alt="" className="food-item-image" />
+                })()}
                 {!cartItem[_id]
                     ? <img className='add' src={assets.add_icon_white} onClick={()=>addToCart(_id)} alt="add"/>
                     :<div className='food-item-counter'>

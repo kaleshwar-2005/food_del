@@ -2,10 +2,11 @@ import orderModel from "../models/order_model.js";
 import userModel from "../models/user_model.js"
 import Stripe from "stripe"
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
+const stripeSecret = process.env.STRIPE_SECRET_KEY;
+const stripe = stripeSecret ? new Stripe(stripeSecret) : null;
 
 const placeOrder = async (req, res) => {
-    const frontend_url="http://localhost:5174"
+    const frontend_url =  "http://localhost:5174";
     try {
         const newOrder = new orderModel({
             userId: req.body.userId,
@@ -22,7 +23,7 @@ const placeOrder = async (req, res) => {
                 product_data: {
                     name: item.name
                 },
-                unit_amount: item.price * 100 * 80
+                unit_amount: Math.round(Number(item.price) * 100)
             },
             quantity:item.quantity
         }))
@@ -37,6 +38,10 @@ const placeOrder = async (req, res) => {
             },
             quantity:1
         })
+
+        if (!stripe) {
+            return res.status(500).json({ success: false, message: "Payment not configured. Missing STRIPE_SECRET_KEY." });
+        }
 
         const session=await stripe.checkout.sessions.create({
             line_items:line_items,

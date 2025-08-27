@@ -15,7 +15,7 @@ const List = (props) => {
             toast.error("Error");
         }
     }
-    const removFood=async (foodId)=>{
+    const removeFood=async (foodId)=>{
         const response=await axios.post(`${url}/api/food/remove`,{id:foodId})
         await fetchList();
         if(response.data.success)
@@ -27,8 +27,8 @@ const List = (props) => {
         }
     }
     useEffect(()=>{
-        fetchList
-    },[])
+        fetchList()
+    },[url])
   return (
     <div className='list add flex-col'>
       <p>All foods List</p>
@@ -43,11 +43,16 @@ const List = (props) => {
         {list.map((item,index)=>{
             return (
                 <div key={index} className='list-table-format'>
-                    <img src={`${url}/images/`+item.image} alt="" />
+                    {(() => {
+                        const src = (typeof item.image === 'string' && (item.image.startsWith('http') || item.image.startsWith('/')))
+                          ? item.image
+                          : `${url}/images/`+item.image;
+                        return <img src={src} alt="" />
+                    })()}
                     <p>{item.name}</p>
                     <p>{item.category}</p>
                     <p>${item.price}</p>
-                    <p onClick={()=>removFood(item._id)} className='cursor'>X</p>
+                    <p onClick={()=>removeFood(item._id)} className='cursor'>X</p>
                 </div>
             )
         })}

@@ -4,7 +4,8 @@ import bcrypt from "bcrypt"
 import validator from "validator"
 
 const createToken=(id)=>{
-    return jwt.sign({id},process.env.JWT_SECRET)
+    const secret = process.env.JWT_SECRET || "dev_jwt_secret";
+    return jwt.sign({id}, secret)
 }
 
 const loginUser=async (req,res)=>{
@@ -32,13 +33,13 @@ const registerUser=async (req,res)=>{
     try {
         const exist=await userModel.findOne({email})
         if(exist){
-            res.json({success:false,message:"User already exists"})
+            return res.json({success:false,message:"User already exists"})
         }
         if(!validator.isEmail(email)){
-            res.json({success:false,message:"Please a enter a valid email"})
+            return res.json({success:false,message:"Please a enter a valid email"})
         }
         if(password.length < 8){
-            res.json({success:false,message:"Please enter a strong password"})
+            return res.json({success:false,message:"Please enter a strong password"})
         }
         const salt=await bcrypt.genSalt(10);
         const hashedPassword=await bcrypt.hash(password,salt)

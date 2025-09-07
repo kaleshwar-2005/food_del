@@ -9,7 +9,6 @@ const ExploreMenu = (props) => {
     
     const handleCategoryClick = (menuName) => {
         console.log('Category clicked:', menuName, 'Current category:', category);
-        // If clicking the same category, set to "All", otherwise set to the clicked category
         if (category === menuName) {
             setCategory("All");
             console.log('Setting category to All');
